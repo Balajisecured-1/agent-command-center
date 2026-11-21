@@ -1,0 +1,13 @@
+{
+  "name": "agent-command-center",
+  "owner": {
+    "name": "Balaji"
+  },
+  "plugins": [
+    {
+      "name": "agent-command-center",
+      "source": "./mods/agent-command-center",
+      "description": "Live agent monitor: agents, handoffs, tokens, quota, runtimes and ETAs in one pane. Observer only, no model calls"
+    }
+  ]
+}

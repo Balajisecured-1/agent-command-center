@@ -1,0 +1,48 @@
+{
+  "name": "agent-command-center",
+  "version": "0.6.0",
+  "description": "Live multi-agent monitor: agents, handoffs, tokens, quota, runtimes and ETAs in a persistent pane, from hook events only (zero extra LLM calls).",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "alerts": {
+      "type": "boolean",
+      "title": "Alerts",
+      "description": "Show toasts for quota/context thresholds, failed agents and finished requests",
+      "default": true
+    },
+    "quotaWarn": {
+      "type": "number",
+      "title": "Quota warning %",
+      "description": "Warn when the 5-hour or weekly quota passes this percent",
+      "default": 80
+    },
+    "ctxWarn": {
+      "type": "number",
+      "title": "Context warning %",
+      "description": "Warn when the context window passes this percent",
+      "default": 85
+    },
+    "animations": {
+      "type": "boolean",
+      "title": "Office animation",
+      "description": "Animate the office scene. Turn off for a still view (reduced motion)",
+      "default": true
+    },
+    "officeWidth": {
+      "type": "number",
+      "title": "Office width (px)",
+      "description": "Drawn width of the office scene. Raise it for a bigger office, lower it if the pane is narrow",
+      "default": 900
+    },
+    "privacy": {
+      "type": "string",
+      "title": "Privacy mode",
+      "description": "strict (default): record no prompts, commands, file paths, outputs, errors or task text, only agent and tool names, counts, tokens and times. standard: also record shortened text, with secrets masked by pattern (a secret that looks like ordinary words can still be recorded)",
+      "default": "strict",
+      "options": [
+        "strict",
+        "standard"
+      ]
+    }
+  }
+}
