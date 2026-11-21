@@ -86,6 +86,7 @@ Set in the plugin's settings (`userConfig`):
 - [Data sources](mods/agent-command-center/docs/DATA-SOURCES.md): what is measured, from which event, and what is inferred or unavailable
 - [Privacy and security](mods/agent-command-center/docs/PRIVACY.md): what is recorded in each mode, what stays on disk, limits
 - [Architecture](mods/agent-command-center/docs/ARCHITECTURE.md): how the reducer, the views and the chat scoping work
+- [Roadmap](mods/agent-command-center/docs/ROADMAP.md): what is planned next
 - [Contributing](CONTRIBUTING.md): run the tests, add an event or a view
 - [Changelog](mods/agent-command-center/CHANGELOG.md)
 - [Security policy](SECURITY.md)
@@ -95,6 +96,10 @@ Set in the plugin's settings (`userConfig`):
 - Verified with headless sessions (single agent, three parallel agents, two chats at once) and an automated suite (reducer scenarios, fuzzed streams, leak tests in both privacy modes, purity and speed checks, pane on terminal and desktop). The desktop pane has been checked by hand on one machine.
 - Token counts are per turn, not per request. Quota appears only when the account reports it (subscription plans).
 - In `standard` privacy mode, masking is pattern based: a short secret or a passphrase made of ordinary words can still be recorded. `strict` (the default) cannot record it.
+
+## What's next
+
+Planned: checking the desktop pane on more machines and long sessions, an independent security review, a license, real screenshots, continuous integration, stronger masking for `standard` mode, report export and better ETAs. Details and reasons are in the [roadmap](mods/agent-command-center/docs/ROADMAP.md).
 
 ## License
 

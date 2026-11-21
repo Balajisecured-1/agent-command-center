@@ -32,6 +32,7 @@ Then `/reload-plugins`. The pane opens by itself.
 - [Data sources](docs/DATA-SOURCES.md)
 - [Privacy and security](docs/PRIVACY.md)
 - [Architecture](docs/ARCHITECTURE.md)
+- [Roadmap](docs/ROADMAP.md)
 - [Changelog](CHANGELOG.md)
 
 ## Test
