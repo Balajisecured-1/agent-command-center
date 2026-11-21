@@ -29,8 +29,8 @@ When Claude launches subagents, it is hard to see who is doing what, what was ha
 In Claude Code:
 
 ```
-/plugin marketplace add OWNER_REPO
-/plugin install agent-command-center --marketplace OWNER_REPO
+/plugin marketplace add Balajisecured-1/agent-command-center
+/plugin install agent-command-center --marketplace Balajisecured-1/agent-command-center
 ```
 
 Then run `/reload-plugins` (or start a new session). The **Agent Command Center** pane opens by itself on desktop. Requires Claude Code 2.1.275 or later.

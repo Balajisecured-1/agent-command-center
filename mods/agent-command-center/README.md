@@ -7,8 +7,8 @@ A native Claude Code mod: a live, persistent pane that shows every agent, handof
 ## Install
 
 ```
-/plugin marketplace add OWNER_REPO
-/plugin install agent-command-center --marketplace OWNER_REPO
+/plugin marketplace add Balajisecured-1/agent-command-center
+/plugin install agent-command-center --marketplace Balajisecured-1/agent-command-center
 ```
 
 Then `/reload-plugins`. The pane opens by itself.
