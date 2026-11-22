@@ -4,8 +4,8 @@
 
 The **Agent Command Center** pane opens when a session starts (the desktop app draws graphics, the terminal draws text). From top to bottom:
 
-1. **Graphic area (desktop only):** the pipeline view, or the office view.
-2. **Buttons:** hide or show the graphic area, switch between pipeline and office, pause or play the animation.
+1. **Graphic area (desktop only):** the pipeline, the route map or the office view.
+2. **Buttons:** hide or show the graphic area, choose the view (Pipeline, Route map, Office), switch the route map between its light and dark look, pause or play the animation.
 3. **Headline:** the current request, overall progress bar and key numbers.
 4. **Agents:** one row per agent. Click a row to open its details (task, handoff status, runtime, tokens, tools, skills, failures).
 5. **More detail:** Summary, Handoffs, Tokens, Quota, Time & ETA, History, Completion, Requests and Diagnostics. Click to open or close, or use `[expand all]`.
@@ -26,6 +26,25 @@ One lane per agent, in the order they were launched:
 Each lane also has its own progress bar, elapsed time and token count. Repeated names are numbered (`researcher #2`). If more than eight agents exist, the eight most relevant lanes are shown (every running agent stays visible) and a row counts the rest.
 
 **Overall progress** is steps finished out of steps launched. A running agent counts for part of a step. It never reads 100% while an agent is still working, and reaches 100% only when the request has ended.
+
+## Route map view (desktop)
+
+Choose **Route map**. The work travels along a rail from the **main chat** (the depot) to **one station per agent**, in the order the agents were launched.
+
+| What you see | Meaning |
+| --- | --- |
+| Numbered flag on a station | The agent's step number (the same number as in the pipeline and the stepper) |
+| Pictogram on the building | The agent's role: magnifier = research, list = planner, shield = QA, pencil = designer, `</>` = developer, star = manager |
+| Pulsing ring | The agent is working now; a chip above names its current tool or skill |
+| Dashed ring | The task was handed to the agent and it has not started yet |
+| Green check, red cross, amber mark | Report delivered, failed or stopped, waiting or blocked |
+| Rail: solid in the agent's colour, with an arrow | The agent has started; a dashed grey leg means the handoff is still on its way |
+| Courier (tram) with a tag | A handoff on its way, for example "Courier · Step 3 · reviewer · handed off". Each parallel handoff gets its own courier (up to three are drawn). |
+| Parked courier | "Waiting on N agents" at the main chat while agents work, or "All reports delivered" at the last station |
+
+Under the map, **step cards** show the agents working right now (up to three side by side when they run in parallel), with progress, time and tokens. **How it went** is a stepper with one node per agent, filled up to the last agent in a row that has delivered. A route of more than five stations turns at the right edge and comes back along a second row, right to left. With more than eight agents the eight most relevant stations are drawn (every running agent stays) and a note counts the rest.
+
+**Light or dark:** the button *Switch to dark look / light look* appears in this view. The light look is cream and orange; the dark look matches the rest of the pane. The pipeline and the office keep their dark look.
 
 ## Office view (desktop)
 

@@ -12,6 +12,7 @@ mods/agent-command-center/
   lib/sections.ts                   text reports and the 14 commands
   lib/compact.ts                    headline, rows, input for the views
   lib/flow.ts                       pipeline view (SVG parts)
+  lib/route.ts                      route map view (SVG parts, light and dark looks)
   lib/office.ts                     office view (SVG parts, choreography)
   types/index.d.ts                  model types and the stored-state contract
   tests/                            claude plugin test suites

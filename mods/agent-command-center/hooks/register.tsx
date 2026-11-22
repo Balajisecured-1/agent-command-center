@@ -10,6 +10,7 @@ import type { Cfg, Ev } from '../lib/model'
 import * as S from '../lib/sections'
 import { agentRow, bar, frameOf, headline, officeInput } from '../lib/compact'
 import { flowParts } from '../lib/flow'
+import { routeParts } from '../lib/route'
 import { advance, officeParts, place, sceneKey } from '../lib/office'
 import type { MoveState } from '../lib/office'
 
@@ -191,6 +192,13 @@ async function saveHist($: Dollar, patch: Parameters<typeof learn>[1]) {
 
 async function toggle($: Dollar, key: string) {
   await update($, uiAtom, (l: string[]) => (l.includes(key) ? l.filter(x => x !== key) : [...l, key]))
+}
+/** One of the three views: the other two view keys are cleared, everything else (open sections, theme) stays. */
+async function setView($: Dollar, v: 'pipeline' | 'route' | 'office') {
+  await update($, uiAtom, (l: string[]) => {
+    const rest = l.filter(x => x !== 'view:office' && x !== 'view:route')
+    return v === 'pipeline' ? rest : [...rest, 'view:' + v]
+  })
 }
 async function setOpen($: Dollar, keys: string[]) {
   await update($, uiAtom, () => keys)
@@ -482,12 +490,19 @@ export const register: Register = (on, options) => {
       const { Svg } = $.ui.resolve(e) as unknown as { Svg: (p: { source: string; alt: string; isInteractive?: boolean; width?: number; height?: number }) => never }
       const animOn = animDefault ? !open.includes('anim:off') : open.includes('anim:on')
       const scale = Math.max(0.5, Math.min(2, officeWidth / 760))
-      // The pipeline (one lane per agent) is the default; the animated office is the alternative view.
-      const asOffice = open.includes('view:office')
-      const parts = asOffice ? officeParts(input, ch.moves, now, animOn) : flowParts(input, now, animOn)
+      // Three views of the same facts: the pipeline (one lane per agent, the default), the route map (work travels along a
+      // rail to one station per agent) and the animated office. The route map has a light and a dark look.
+      const view: 'pipeline' | 'route' | 'office' = open.includes('view:office') ? 'office' : open.includes('view:route') ? 'route' : 'pipeline'
+      const asOffice = view === 'office'
+      const theme = open.includes('theme:dark') ? 'dark' : 'light'
+      const parts = view === 'office' ? officeParts(input, ch.moves, now, animOn) : view === 'route' ? routeParts(input, now, animOn, theme) : flowParts(input, now, animOn)
       const alts: Record<string, string> = {
         header: `Agent summary: ${input.stats.active} of ${input.stats.total} agents active, ${input.stats.completed} completed`,
         lanes: 'Pipeline: one lane per agent with its stages and progress',
+        rhead: 'Route map summary: agents active, running in parallel, reports in, tokens and progress',
+        rmap: 'Route map: a rail from the main chat to one station per agent, with a courier carrying each handoff',
+        rcards: 'Step details of the agents working now, and how the request went step by step',
+        rfeed: 'Handoffs and messages',
         floor: 'Office floor: where each agent is and what it is doing',
         activity: 'Agent activity list',
         comms: 'Agent communication feed',
@@ -497,14 +512,22 @@ export const register: Register = (on, options) => {
       // swapped when its structure really changed (animation elements and walk countdowns do not count), at most
       // once per 2 s. Parts that did not change are never touched.
       const nodes = parts.map(part => {
-        const sig = `${animOn}|${asOffice}|${sceneKey(part.svg)}`
+        const sig = `${animOn}|${view}|${theme}|${sceneKey(part.svg)}`
         const c = ch.officeCache[part.id]
         if (!c || (sig !== c.sig && now - c.at >= 2000)) ch.officeCache[part.id] = { sig, source: part.svg, at: now }
         const src = (ch.officeCache[part.id] as { source: string }).source
         return { part, node: <Svg key={'svg-' + part.id} source={src} alt={alts[part.id] ?? part.id} isInteractive={true} width={Math.round(part.w * scale)} height={Math.round(part.h * scale)} /> }
       })
       const byId = (id: string) => nodes.find(n => n.part.id === id)?.node
-      officeNode = asOffice ? (
+      officeNode = view === 'route' ? (
+        <Box flexDirection="column">
+          {byId('rhead')}
+          {byId('rmap')}
+          {byId('rcards')}
+          {byId('rfeed')}
+          <Text dimColor>Each station is one real agent; the courier carries each handoff. Names, statuses and numbers come from real hook events.</Text>
+        </Box>
+      ) : asOffice ? (
         <Box flexDirection="column">
           {byId('header')}
           {byId('floor')}
@@ -541,8 +564,20 @@ export const register: Register = (on, options) => {
           </Button>
         )}
         {showOffice && (
-          <Button key="b-view" onPress={() => toggle($, 'view:office')}>
-            <Text dimColor>{open.includes('view:office') ? '⇄ Switch to pipeline view' : '⇄ Switch to office view'}</Text>
+          <Box>
+            {(['pipeline', 'route', 'office'] as const).map(v => {
+              const isCurrent = (open.includes('view:office') ? 'office' : open.includes('view:route') ? 'route' : 'pipeline') === v
+              return (
+                <Button key={'v-' + v} onPress={() => setView($, v)}>
+                  <Text color={isCurrent ? 'cyan' : undefined} dimColor={!isCurrent}>{isCurrent ? '● ' : '○ '}{v === 'pipeline' ? 'Pipeline' : v === 'route' ? 'Route map' : 'Office'}  </Text>
+                </Button>
+              )
+            })}
+          </Box>
+        )}
+        {showOffice && open.includes('view:route') && (
+          <Button key="b-theme" onPress={() => toggle($, 'theme:dark')}>
+            <Text dimColor>{open.includes('theme:dark') ? '◐ Switch to light look' : '◐ Switch to dark look'}</Text>
           </Button>
         )}
         {showOffice && (

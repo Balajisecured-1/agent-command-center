@@ -4,11 +4,20 @@ A live control panel for [Claude Code](https://claude.com/claude-code) multi-age
 
 When Claude launches subagents, it is hard to see who is doing what, what was handed to whom, how many tokens each agent used, how much of your quota is left and when the work will finish. Agent Command Center shows all of it in one persistent pane, from the events Claude Code already emits.
 
+**Route map** (light and dark looks): work travels along a rail to one station per agent, carried by a courier.
+
+![Route map view, light look: stations, couriers, step cards and a stepper](mods/agent-command-center/docs/img/route-light.svg)
+
+![Route map view, dark look](mods/agent-command-center/docs/img/route-dark.svg)
+
+**Pipeline** (default): one lane per agent with its stages, progress, time and tokens.
+
 ![Pipeline view: one lane per agent with its stages, progress, time and tokens](mods/agent-command-center/docs/img/pipeline.svg)
 
 ## Highlights
 
 - **Pipeline view (default):** one lane per agent, in launch order, with four stages (handed off, started, working, report delivered), its own progress bar, elapsed time and tokens. Agents that run in parallel each get a lane and are counted in the header.
+- **Route map view:** the work travels along a rail from the main chat to one station per agent, in launch order. A courier carries each new handoff and a floating tag follows it; each parallel handoff gets its own courier. Step cards show the agents working now, and a stepper shows how the request went. Light (cream and orange) and dark looks.
 - **Office view (desktop):** an animated virtual office where agents walk to their desks, take tasks from their parent and hand results back. A visual metaphor; every name, status and number is real.
 - **Text view (terminal):** the same facts as plain text.
 - **One chat, one flow:** each chat shows only the agents started in that chat, even while other chats run agents at the same time.
@@ -45,7 +54,7 @@ claude --plugin-dir ./mods/agent-command-center
 
 1. Ask Claude for something that uses subagents, for example: *"Launch 3 general-purpose agents in parallel, each reading a different file, then summarise."*
 2. Watch the pane: lanes appear as agents are handed work and fill as they run and report.
-3. Click an agent to see its details, or use the section buttons (Summary, Handoffs, Tokens, Quota, Time & ETA, History, Completion, Requests, Diagnostics).
+3. Switch the view with the **Pipeline / Route map / Office** buttons. Click an agent to see its details, or use the section buttons (Summary, Handoffs, Tokens, Quota, Time & ETA, History, Completion, Requests, Diagnostics).
 4. Type `/agent-status` (or any command below) for the same information as text.
 
 ## Slash commands
@@ -77,7 +86,7 @@ Set in the plugin's settings (`userConfig`):
 | `alerts` | on | Toasts for quota or context thresholds, failed agents and finished requests |
 | `quotaWarn` | 80 | Warn when the 5-hour or weekly quota passes this percent |
 | `ctxWarn` | 85 | Warn when the context window passes this percent |
-| `animations` | on | Animate the office view. Off gives a still frame |
+| `animations` | on | Animate the office and the route map (couriers, pulses). Off gives a still frame |
 | `officeWidth` | 900 | Drawn width in pixels. Lower it if the pane is narrow |
 
 ## Documentation

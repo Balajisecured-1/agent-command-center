@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0
+- New **Route map** view, inspired by isometric route-map dashboards: the work travels along a rail from the main chat to one station per agent, in launch order. Each station shows the agent's role pictogram, a numbered flag, its state (working ring, handed-off dashed ring, done check, failed cross, waiting mark) and what a working agent is doing. A courier (tram) carries every handoff that is still on its way to its station, with a floating tag ("Courier · Step 3 · name · handed off"); parallel handoffs each get their own courier. Routes longer than five stations turn and come back along a second row; rails fill in once an agent has started and show direction arrows.
+- Step cards under the map show the agents working right now (up to three side by side when they run in parallel), and a stepper shows how the request went, step by step.
+- Light (cream and orange) and dark looks for the route map, switched with a button. Pipeline and office keep their dark look.
+- The pane now has three view buttons: Pipeline (default), Route map, Office.
+- Tests for the new view (parts, themes, couriers, bounds, escaping, hostile names, pane switching).
+
 ## 0.6.0
 - The agent flow is scoped to one chat. Every chat (session id) has its own model, pane, status line and caches. Only agents started in a chat appear in that chat's flow, and events from another chat are never recorded or reacted to: each event carries the id of its chat, classic hooks also say which session they belong to, and a model rejects anything stamped with a different id (counted as "ignored events from another chat" in `/agent-diagnostics`).
 - A new chat id (after `/clear` or a resume) starts an empty flow. Chat A and chat B can run agents at the same time and each shows only its own; switching never mixes them.

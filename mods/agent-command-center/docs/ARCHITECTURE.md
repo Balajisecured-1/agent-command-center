@@ -7,7 +7,7 @@ hooks (register.tsx)  ->  Ev (+ chat id)  ->  reduce(model, ev, cfg)  ->  Model 
                                                                            |
         sections.ts (text reports, 14 commands)    compact.ts (headline, rows, view input)
                                                                            |
-                       flow.ts (pipeline SVG)  /  office.ts (office SVG)  /  Text view on the terminal
+                       flow.ts (pipeline)  /  route.ts (route map)  /  office.ts (office)  /  Text view on the terminal
 ```
 
 ## Principles
@@ -36,6 +36,7 @@ One chat = one session id.
 ## Views
 
 - **Pipeline (`flow.ts`):** three independent SVG parts (`header`, `lanes`, `comms`), one lane per agent, at most eight lanes with a count of the rest. Default.
+- **Route map (`route.ts`):** four SVG parts (`rhead`, `rmap`, `rcards`, `rfeed`) in a `light` or `dark` look (`LOOKS`). Stations come from `stationPos()` (five per row, the second row runs right to left); each is an isometric platform and building drawn with `box()`. A courier is a `<g>` placed at its destination with an `animateMotion` whose path is relative to that spot, so removing the animation (animations off) leaves it parked in the right place. Time and token text lives in `rcards`, not in the map, so the map's markup changes only when its structure does.
 - **Office (`office.ts`):** the animated scene as parts (`header`, `floor`, `activity`, `comms`, `timeline`).
 - Each part is its own SVG. A part is swapped only when its structure changed (animation elements and walk countdowns do not count), at most once every 2 s, so frames do not restart or flicker. The terminal has no `Svg` element and gets text only.
 - The only timer is a 3 s local redraw while something is live.
