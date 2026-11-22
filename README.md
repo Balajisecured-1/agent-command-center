@@ -10,6 +10,10 @@ When Claude launches subagents, it is hard to see who is doing what, what was ha
 
 ![Route map view, dark look](mods/agent-command-center/docs/img/route-dark.svg)
 
+**Office** (isometric): rooms, desks with monitors, characters with name tags and a card per agent.
+
+![Office view: isometric rooms, desks with monitors, characters with name tags, agent cards](mods/agent-command-center/docs/img/office.svg)
+
 **Pipeline** (default): one lane per agent with its stages, progress, time and tokens.
 
 ![Pipeline view: one lane per agent with its stages, progress, time and tokens](mods/agent-command-center/docs/img/pipeline.svg)
@@ -18,7 +22,7 @@ When Claude launches subagents, it is hard to see who is doing what, what was ha
 
 - **Pipeline view (default):** one lane per agent, in launch order, with four stages (handed off, started, working, report delivered), its own progress bar, elapsed time and tokens. Agents that run in parallel each get a lane and are counted in the header.
 - **Route map view:** the work travels along a rail from the main chat to one station per agent, in launch order. A courier carries each new handoff and a floating tag follows it; each parallel handoff gets its own courier. Step cards show the agents working now, and a stepper shows how the request went. Light (cream and orange) and dark looks.
-- **Office view (desktop):** an animated virtual office where agents walk to their desks, take tasks from their parent and hand results back. A visual metaphor; every name, status and number is real.
+- **Office view (desktop):** an isometric virtual office with five rooms (workspace, meeting room, manager office, lounge, kitchen). Each agent is a character with a name tag: it walks in from the entrance, takes the task from its parent, works at a desk whose monitor lights up in its state colour, hands the result back and rests. Tabs show which rooms are occupied, and a card strip lists every agent. A visual metaphor; every name, status and number is real.
 - **Text view (terminal):** the same facts as plain text.
 - **One chat, one flow:** each chat shows only the agents started in that chat, even while other chats run agents at the same time.
 - **Numbers that matter:** tokens (total, per agent, per model, cache hit rate), 5-hour and weekly quota, context window, runtimes, ETAs with a confidence range, retries, stalled agents.

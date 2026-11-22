@@ -48,7 +48,21 @@ Under the map, **step cards** show the agents working right now (up to three sid
 
 ## Office view (desktop)
 
-Choose **Switch to office view**. Each agent is a character: it walks in from the entrance, takes the task from its parent, works at a desk (with the skill it uses shown), then hands the result over and rests. Hover a character for a tooltip. **Pause animation** gives a still frame (use it for reduced motion, or turn `animations` off in the settings).
+Choose **Office**. The scene is an isometric office with five rooms. Each agent is a character with a name tag (status glyph, name, status) above its head.
+
+| What you see | Meaning |
+| --- | --- |
+| Entrance | New agents walk in from here |
+| Manager office | The main chat sits here. An agent that was just handed a task, or is handing its result back, stands here (or in the meeting room when its parent is another agent) |
+| Workspace | Agents that are working, blocked or failed. Each one stands at a desk |
+| Monitor on a desk | Lit in the colour of the agent's state: blue = working, red = blocked or failed. A pulsing screen means working now. An empty desk is dark |
+| Lounge | Agents that delivered their report rest here |
+| Kitchen | Agents that are waiting for their next step |
+| Flying document | A task going to an agent, or a result going back to its parent |
+| Speech bubble | What the agent is doing now or the skill it uses. With more than three agents at desks the bubbles go and the tags shrink to the name (the cards below keep the detail) |
+| Room tabs (top) | A lit tab with a number says how many agents are in that room. The pill on the right says how many agents are active |
+
+Under the scene there is one **card per agent** (avatar, name, role, status, progress bar, current activity), then the communication feed and the task timeline. Hover a character for a tooltip. **Pause animation** gives a still frame (use it for reduced motion, or turn `animations` off in the settings). The office keeps its dark look.
 
 ## Parallel agents
 

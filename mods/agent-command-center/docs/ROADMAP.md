@@ -18,7 +18,7 @@ Planned improvements, in rough priority order. These are intentions, not promise
 | Item | Why |
 | --- | --- |
 | **Click a station for details** | Open the agent's detail panel from the map, as the pipeline lanes do. Needs the host to deliver clicks inside drawings. |
-| **Richer scenery** | More buildings per role, a second floor for nested agents (an agent that launches its own agents), and a real camera zoom. |
+| **Richer scenery** | A second floor for nested agents (an agent that launches its own agents), a real camera zoom and rotation (the pane can only draw flat SVG today), and clicking a character to open its details. |
 | **Stronger masking in `standard` mode** | Masking is pattern based, so a short secret or a passphrase of ordinary words can still be recorded. Ideas: an allow-list mode that records only known-safe fields, and optional user-defined patterns. `strict` stays the default. |
 | **Export a report** | Save the execution report and the request ledger as a file you can attach to a ticket or share, with the same privacy rules applied. |
 | **Per-request token detail** | Tokens are per turn today. Finer detail depends on what the host reports. |

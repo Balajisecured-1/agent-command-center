@@ -1,6 +1,6 @@
 {
   "name": "agent-command-center",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Live multi-agent monitor: agents, handoffs, tokens, quota, runtimes and ETAs in a persistent pane, from hook events only (zero extra LLM calls).",
   "types": "./types/index.d.ts",
   "userConfig": {

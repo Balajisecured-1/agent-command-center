@@ -4,7 +4,8 @@ import { officeInput } from '../lib/compact'
 import { emptyHistory } from '../lib/derive'
 import { newModel, reduce } from '../lib/model'
 import type { Ev } from '../lib/model'
-import { advance, officeParts, officeSvg, place, sceneKey, slotPos } from '../lib/office'
+import { ENTRANCE, ROOMS, advance, iso, officeParts, officeSvg, place, sceneKey, slotPos } from '../lib/office'
+import type { Room } from '../lib/office'
 
 const T0 = 5_000_000
 const run = (evs: Ev[]) => evs.reduce((a, e) => reduce(a, e), newModel('s1', T0))
@@ -62,7 +63,7 @@ test('movement: a new agent walks in from the entrance, a room change becomes a 
   const m = run(base)
   const p0 = place(officeInput(m, T0 + 1500, h).people, T0 + 1500)
   let moves = advance({}, p0, T0 + 1500)
-  expect(moves['r1']?.from).toEqual({ x: 380, y: 420 })
+  expect(moves['r1']?.from).toEqual(ENTRANCE)
   expect(moves['main']?.from).toEqual(moves['main']?.to)
   // later it moves to a desk: the walk starts from where it stood
   const m2 = reduce(m, { k: 'agent.start', t: T0 + 1200, agentId: 'r1', type: 'hm-researcher' })
@@ -120,4 +121,66 @@ test('no flicker: redraws give the same parts, even mid-walk and when the walk e
     const k = keys(T0 + dt)
     for (const id of Object.keys(k0)) expect(`${id}:${k[id] === k0[id]}`).toBe(`${id}:true`)
   }
+})
+
+/** Is the screen point inside the room's diamond? (u and v both within 0..1, with a little slack) */
+function inside(room: Room, p: { x: number; y: number }): boolean {
+  const o = iso(room, 0, 0)
+  const r = iso(room, 1, 0)
+  const hw = r.x - o.x
+  const u = ((p.x - o.x) / hw + (p.y - o.y) / (hw / 2)) / 2
+  const v = ((o.x - p.x) / hw + (p.y - o.y) / (hw / 2)) / 2
+  return u > -0.02 && u < 1.02 && v > -0.02 && v < 1.02
+}
+
+test('isometric floor: every seat of every room is inside its own room, and the first desks are spread apart', () => {
+  for (const room of ROOMS) {
+    for (let k = 0; k < 24; k++) expect(`${room}${k}:${inside(room, slotPos(room, k))}`).toBe(`${room}${k}:true`)
+  }
+  // the first agents do not stand on top of each other
+  const seats = [0, 1, 2, 3].map(k => slotPos('workspace', k))
+  for (let i = 0; i < seats.length; i++) {
+    for (let j = i + 1; j < seats.length; j++) {
+      const a = seats[i]!
+      const b = seats[j]!
+      expect(Math.hypot(a.x - b.x, a.y - b.y)).toBeGreaterThan(30)
+    }
+  }
+  // all 20 desks are distinct
+  expect(new Set(Array.from({ length: 20 }, (_, k) => `${slotPos('workspace', k).x},${slotPos('workspace', k).y}`)).size).toBe(20)
+})
+
+test('the floor shows every room with its sign, a desk with a monitor per seat, and lit tabs for occupied rooms', () => {
+  const m = run([
+    { k: 'request.start', t: T0, text: 'job' },
+    { k: 'turn.start', t: T0 },
+    { k: 'spawn', t: T0 + 10, agentId: 'a1', type: 'Explore', desc: 'scan', prompt: 'scan' },
+    { k: 'agent.start', t: T0 + 20, agentId: 'a1', type: 'Explore' },
+  ])
+  const ps = officeParts(officeInput(m, T0 + 9000, emptyHistory()), {}, T0 + 9000)
+  const floor = ps.find(p => p.id === 'floor')!
+  const header = ps.find(p => p.id === 'header')!
+  for (const label of ['WORKSPACE · 1', 'MEETING ROOM', 'MANAGER OFFICE · 1', 'LOUNGE', 'KITCHEN', 'ENTRANCE']) expect(floor.svg.includes(label)).toBe(true)
+  // one lit screen for the one agent at a desk (the live colour is used on no other element of the floor's furniture)
+  expect((floor.svg.match(/fill="#6da7ec" opacity="\.9"/g) ?? []).length).toBe(1)
+  expect(header.svg.includes('1 active')).toBe(true)
+  for (const t of ['Workspace', 'Meeting room', 'Manager office', 'Lounge', 'Kitchen']) expect(header.svg.includes(t)).toBe(true)
+})
+
+test('a crowded office stays readable and bounded: tags shrink to the name, no bubbles at the desks, no stray values', () => {
+  const evs: Ev[] = [{ k: 'request.start', t: T0, text: 'job' }, { k: 'turn.start', t: T0 }]
+  for (let i = 0; i < 40; i++) {
+    evs.push({ k: 'spawn', t: T0 + 10 + i, agentId: `a${i}`, type: i === 0 ? '<b onload="x">&"' : 'Explore', desc: 'scan', prompt: 'scan' })
+    evs.push({ k: 'agent.start', t: T0 + 20 + i, agentId: `a${i}`, type: 'Explore' })
+  }
+  const m = run(evs)
+  const input = officeInput(m, T0 + 9000, emptyHistory())
+  const ps = officeParts(input, advance({}, place(input.people, T0 + 9000), T0 + 9000), T0 + 9000)
+  for (const p of ps) {
+    expect(/NaN|undefined|\[object|Infinity/.test(p.svg)).toBe(false)
+    expect(p.svg.includes('<b onload')).toBe(false)
+  }
+  const floor = ps.find(p => p.id === 'floor')!.svg
+  expect(floor.length).toBeLessThan(400_000)
+  expect(/skill: |Task from/.test(floor)).toBe(false)
 })

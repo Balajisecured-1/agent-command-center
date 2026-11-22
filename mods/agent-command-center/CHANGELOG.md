@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.0
+- The **office** view is now isometric, inspired by virtual-office dashboards: five rooms (workspace, meeting room, manager office, lounge, kitchen) as diamond slabs with back walls, windows, a meeting table, sofa, counter and plants, plus an entrance mat. Workers stand at desks with a keyboard and a monitor; the monitor lights in the colour of the agent's state and pulses while it works. A desk row is filled spread out from the middle of the room, so a few agents do not overlap.
+- Characters keep their name tag and speech bubble, now drawn in a top layer so no desk or wall hides them. With more than three agents at desks the tags shrink to the name and the bubbles go. Characters and furniture are drawn in depth order.
+- Header: room tabs light up with the number of agents in each room, and an "N active" pill on the right. Room signs hang in front of each room.
+- Agent cards: a face in the agent's colour, a progress bar and the current activity.
+- Same choreography as before (walk in from the entrance, take the task, work, hand over, rest), same parts (`header`, `floor`, `activity`, `comms`, `timeline`) and the same no-flicker rules.
+- Not possible in the pane: 3D rotation or scroll zoom, and opening a chat with a character (the pane draws flat SVG only).
+- Tests: every seat is inside its room, desks are distinct and spread, signs and tabs, a lit monitor per working agent, a crowded office stays bounded and escaped.
+
 ## 0.7.0
 - New **Route map** view, inspired by isometric route-map dashboards: the work travels along a rail from the main chat to one station per agent, in launch order. Each station shows the agent's role pictogram, a numbered flag, its state (working ring, handed-off dashed ring, done check, failed cross, waiting mark) and what a working agent is doing. A courier (tram) carries every handoff that is still on its way to its station, with a floating tag ("Courier · Step 3 · name · handed off"); parallel handoffs each get their own courier. Routes longer than five stations turn and come back along a second row; rails fill in once an agent has started and show direction arrows.
 - Step cards under the map show the agents working right now (up to three side by side when they run in parallel), and a stepper shows how the request went, step by step.
